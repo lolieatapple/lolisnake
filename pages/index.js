@@ -8,7 +8,37 @@ class Snake extends React.Component {
 
     this.state = {
       start: false,
+      testSnake: [],
     }
+  }
+
+  testSnake = [
+    {top: 10, left: 50, type: "head"},
+    {top: 10, left: 46, type: "body"},
+    {top: 10, left: 42, type: "body"},
+    {top: 10, left: 38, type: "body"},
+    {top: 10, left: 34, type: "body"},
+    {top: 10, left: 30, type: "body"},
+    {top: 10, left: 26, type: "body"},
+    {top: 10, left: 22, type: "body"},
+    {top: 10, left: 18, type: "body"},
+    {top: 10, left: 14, type: "body"},
+    {top: 10, left: 10, type: "body"},
+    {top: 10, left: 6, type: "body"},
+  ]
+
+  componentDidMount() {
+    setInterval(()=>{
+      for (let i=0; i<this.testSnake.length; i++) {
+        if (this.testSnake[i].left <= 50) {
+          this.testSnake[i].left++;
+        } else {
+          this.testSnake[i].left = 2;
+        }
+      }
+
+      this.setState({testSnake: this.testSnake});
+    }, 200);
   }
 
   onStart = () => {
@@ -54,8 +84,16 @@ class Snake extends React.Component {
               </div>
           }
           <div>
-            <Icon className={styles.snakeHead} type="smile" />
-            <Icon className={styles.snakeBody} type="plus-circle" />
+            
+            
+            {this.testSnake.map((v, i)=>{
+              let top = v.top;
+              let left = v.left;
+              if (v.type === 'head') {
+                return <Icon className={styles.snakeHead} style={{top: top+"vh", left: left+"vh"}} type="smile" />
+              }
+              return <Icon className={styles.snakeBody} style={{top: top+"vh", left: left+"vh"}} type="plus-circle" />
+            })}
           </div>
         </div>
       </div>
