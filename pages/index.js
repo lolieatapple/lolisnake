@@ -28,6 +28,12 @@ class Snake extends React.Component {
   ]
 
   componentDidMount() {
+    
+  }
+
+  onStart = () => {
+    this.setState({start: true});
+
     setInterval(()=>{
       for (let i=0; i<this.testSnake.length; i++) {
         if (this.testSnake[i].left <= 50) {
@@ -39,10 +45,6 @@ class Snake extends React.Component {
 
       this.setState({testSnake: this.testSnake});
     }, 200);
-  }
-
-  onStart = () => {
-    this.setState({start: true});
   }
 
   onRank = () => {
@@ -86,7 +88,7 @@ class Snake extends React.Component {
           <div>
             
             
-            {this.testSnake.map((v, i)=>{
+            {this.state.testSnake.map((v, i)=>{
               let top = v.top;
               let left = v.left;
               if (v.type === 'head') {
