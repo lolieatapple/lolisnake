@@ -1,5 +1,5 @@
 
-import { Icon, Modal, Input } from 'antd';
+import { Icon, Modal, Input, Table } from 'antd';
 import styles from './index.less';
 import Snake from './snake/snake';
 import axios from 'axios';
@@ -17,12 +17,35 @@ class Ground extends React.Component {
       clock: 0,
     }
 
-    this.rankServer = 'http://localhost:3000/rank';
+    this.rankServer = 'https://molin.tech:8801/rank';
   }
 
   componentDidMount() {
 
   }
+
+  columns = [
+    {
+      title: 'Name',
+      dataIndex: 'nick',
+      key: 'name',
+    },
+    {
+      title: 'Score',
+      dataIndex: 'score',
+      key: 'score',
+    },
+    {
+      title: 'Level',
+      dataIndex: 'level',
+      key: 'level',
+    },
+    {
+      title: 'Time',
+      dataIndex: 'time',
+      key: 'time',
+    },
+  ]
 
   onStart = () => {
     this.setState({ start: true });
@@ -69,19 +92,25 @@ class Ground extends React.Component {
       method: 'GET',
       url: this.rankServer,
       timeout: 10000,
-    }).then((value)=>{
-      console.log(value);
-    }).catch(console.log);
+    }).then((value) => {
+      console.log(value.data);
+      let obj = value.data;
+      let dataSource = [];
+      for (var i in obj) {
+        console.log('键名：', i);
+        console.log('键值：', obj[i]);
+        dataSource.push(obj[i]);
+      }
 
-    Modal.info({
-      title: '排行榜',
-      content: (
-        <div>
-          <p>some messages...some messages...</p>
-          <p>some messages...some messages...</p>
-        </div>
-      ),
-      onOk() { },
+      Modal.info({
+        title: '排行榜',
+        content: (
+          <Table columns={this.columns} size="small" dataSource={dataSource.sort((a, b)=>{return b.score - a.score})}/>
+        ),
+        onOk() { },
+      });
+    }).catch((err)=>{
+      window.alert(err);
     });
   }
 

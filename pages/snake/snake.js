@@ -28,7 +28,6 @@ class Snake {
     this.snakeBodyGo();
     this.snakeHeadGo();
     let ret = this.collisionDetection();
-
     return {
       score: this.score,
       level: this.level,
