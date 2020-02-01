@@ -18,6 +18,11 @@ const routes = [
     component: require('../index.js').default,
   },
   {
+    path: '/snake',
+    exact: true,
+    component: require('../snake.js').default,
+  },
+  {
     component: () =>
       React.createElement(
         require('/Users/molin/.config/yarn/global/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')

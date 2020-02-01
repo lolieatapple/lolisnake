@@ -1,50 +1,43 @@
 
 import { Icon, Modal } from 'antd';
 import styles from './index.less';
+import Snake from './snake';
 
-class Snake extends React.Component {
+
+
+class Ground extends React.Component {
   constructor(props) {
     super(props);
-
+    this.snakeEngine = new Snake();
     this.state = {
       start: false,
-      testSnake: [],
+      snake: [],
+      score: 0,
+      level: 0,
+      clock: 0,
     }
   }
 
-  testSnake = [
-    {top: 10, left: 50, type: "head"},
-    {top: 10, left: 46, type: "body"},
-    {top: 10, left: 42, type: "body"},
-    {top: 10, left: 38, type: "body"},
-    {top: 10, left: 34, type: "body"},
-    {top: 10, left: 30, type: "body"},
-    {top: 10, left: 26, type: "body"},
-    {top: 10, left: 22, type: "body"},
-    {top: 10, left: 18, type: "body"},
-    {top: 10, left: 14, type: "body"},
-    {top: 10, left: 10, type: "body"},
-    {top: 10, left: 6, type: "body"},
-  ]
-
   componentDidMount() {
-    
+
   }
 
   onStart = () => {
-    this.setState({start: true});
+    this.setState({ start: true });
+    this.setSpeed(0);
+  }
 
-    setInterval(()=>{
-      for (let i=0; i<this.testSnake.length; i++) {
-        if (this.testSnake[i].left <= 50) {
-          this.testSnake[i].left++;
-        } else {
-          this.testSnake[i].left = 2;
-        }
-      }
+  go = () => {
+    let ret = this.snakeEngine.run(window.innerWidth, window.innerHeight);
+    this.setState({ snake: ret.snake, score: ret.score, level: ret.level, clock: this.state.clock+1 });
+  }
 
-      this.setState({testSnake: this.testSnake});
-    }, 200);
+  setSpeed = (level) => {
+    if (this.speed) {
+      clearInterval(this.speed);
+    }
+
+    this.speed = setInterval(this.go, 200 - level * 2);
   }
 
   onRank = () => {
@@ -56,14 +49,14 @@ class Snake extends React.Component {
           <p>some messages...some messages...</p>
         </div>
       ),
-      onOk() {},
+      onOk() { },
     });
   }
 
   render() {
     return (
       <div className={styles.body}>
-        <div className={styles.ground}></div>
+        <div id='ground' className={styles.ground}></div>
         <div className={styles.ctrl}>
           {
             this.state.start ?
@@ -86,16 +79,20 @@ class Snake extends React.Component {
               </div>
           }
           <div>
-            
-            
-            {this.state.testSnake.map((v, i)=>{
+            {this.state.snake.map((v, i) => {
               let top = v.top;
               let left = v.left;
               if (v.type === 'head') {
-                return <Icon className={styles.snakeHead} style={{top: top+"vh", left: left+"vh"}} type="smile" />
+                return <div className={styles.snakeHead} style={{ top: top + "vh", left: left + "vh" }} />
               }
-              return <Icon className={styles.snakeBody} style={{top: top+"vh", left: left+"vh"}} type="plus-circle" />
+              return <div className={styles.snakeBody} style={{ top: top + "vh", left: left + "vh" }} />
             })}
+          </div>
+          <div className={styles.headerBar}>
+            <div>SCORE: {this.state.score}</div>
+            <div>LEVEL: {this.state.level}</div>
+            <div>TIME: {this.state.clock}</div>
+
           </div>
         </div>
       </div>
@@ -103,4 +100,4 @@ class Snake extends React.Component {
   }
 }
 
-export default Snake;
+export default Ground;
