@@ -8,7 +8,10 @@ class Snake {
       { top: 10, left: 20, type: "head" },
       { top: 10, left: 19, type: "body" },
       { top: 10, left: 18, type: "body" },
+      { top: 10, left: 17, type: "body" },
+      { top: 10, left: 16, type: "body" },
     ];
+    
     this.score = 0;
     this.level = 0;
     this.direct = 0;
@@ -19,14 +22,35 @@ class Snake {
     this.width = 0;
     this.height = 0;
     this.clock = 0;
+    this.foodScore = 0;
+    this.snakeLength = 0;
+    this.snakeOldLength = 0;
+
+    this.food = [
+      { top: this.randY(), left: this.randX(), type: 'normal'},
+      { top: this.randY(), left: this.randX(), type: 'normal'},
+      { top: this.randY(), left: this.randX(), type: 'normal'},
+      { top: this.randY(), left: this.randX(), type: 'super'},
+    ];
+    console.log('food:', this.food);
   }
 
+  randX() {
+    return Math.floor((Math.random()*this.maxX)+1);
+  }
+
+  randY() {
+    return Math.floor((Math.random()*this.maxY)+1);
+  }
 
   run(width, height) {
     this.clock++;
     this.updateSize(width, height);
     this.snakeBodyGo();
     this.snakeHeadGo();
+    this.calcLevel();
+    this.calcScore();
+    this.addFood();
     let ret = this.collisionDetection();
     return {
       score: this.score,
@@ -34,7 +58,16 @@ class Snake {
       clock: this.clock,
       gameOver: ret ==='GameOver',
       snake: this.snake,
+      food: this.food,
     }
+  }
+
+  calcScore() {
+    this.score = this.clock + 100*this.level + this.foodScore;
+  }
+
+  calcLevel() {
+    this.level = this.snake.length - 5;
   }
 
   updateSize(width, height) {
@@ -69,8 +102,9 @@ class Snake {
       this.snake[i].left = this.snake[i - 1].left;
     }
 
-    if (this.clock % 10 === 0) {
+    if (this.clock % 100 === 0 || this.snakeLength !== this.snakeOldLength) {
       this.snake.push({ top: tailY, left: tailX, type: 'body' });
+      this.snakeOldLength = this.snakeLength;
     }
 
   }
@@ -109,6 +143,15 @@ class Snake {
     }
   }
 
+  addFood() {
+    if (Math.floor((Math.random()*20)) === 0 ) {
+      if (Math.floor((Math.random()*10)) === 0 ) {
+        this.food.push({top: this.randY(), left: this.randX(), type:'super' });
+      } else {
+        this.food.push({top: this.randY(), left: this.randX(), type:'normal' });
+      }
+    }
+  }
 
   collisionDetection() {
     for (let i = 0; i < this.snake.length; i++) {
@@ -117,6 +160,19 @@ class Snake {
           console.log('GameOver', this.snake[i], this.snake[j], i, j);
           return "GameOver";
         }
+      }
+    }
+
+    for (let i=0; i<this.food.length; i++) {
+      if (this.snake[0].left === this.food[i].left && this.snake[0].top === this.food[i].top) {
+        if (this.food[i].type === 'normal') {
+          this.foodScore += 100
+        } else {
+          this.foodScore += 1000
+        }
+
+        this.snakeLength++;
+        this.food.splice(i, 1);
       }
     }
   }

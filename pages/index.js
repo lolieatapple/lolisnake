@@ -12,6 +12,7 @@ class Ground extends React.Component {
     this.state = {
       start: false,
       snake: [],
+      food: [],
       score: 0,
       level: 0,
       clock: 0,
@@ -54,7 +55,7 @@ class Ground extends React.Component {
 
   go = () => {
     let ret = this.snakeEngine.run(window.innerWidth, window.innerHeight);
-    this.setState({ snake: ret.snake, score: ret.score, level: ret.level, clock: ret.clock });
+    this.setState({ snake: ret.snake, score: ret.score, level: ret.level, clock: ret.clock, food: ret.food });
     if (ret.gameOver) {
       let nick = document.getElementById('input').value;
       console.log(nick, 'GameOver.');
@@ -148,6 +149,14 @@ class Ground extends React.Component {
               }
               return <div className={styles.snakeBody} style={{ top: top + "vh", left: left + "vh" }} />
             })}
+            {this.state.food.map((v, i) => {
+              let top = v.top;
+              let left = v.left;
+              if (v.type === 'normal') {
+                return <div className={styles.normalFood} style={{ top: top + "vh", left: left + "vh" }} />
+              }
+              return <div className={styles.superFood} style={{ top: top + "vh", left: left + "vh" }} />
+            })}
           </div>
           <div className={styles.headerBar}>
             <div>SCORE: {this.state.score}</div>
@@ -160,7 +169,7 @@ class Ground extends React.Component {
           <div style={{ margin: '1vh' }}>请先输入昵称😊:</div>
           <Input
             id='input'
-            placeholder="先输入昵称再开始哦~" style={{ width: '50vw' }} defaultValue={'群主的小迷妹'} />
+            placeholder="先输入昵称再开始哦~" style={{ width: '50vw' }} defaultValue={'匿名'} />
         </div>
       </div>
     );
