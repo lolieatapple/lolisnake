@@ -18,9 +18,9 @@ const routes = [
     component: require('../index.js').default,
   },
   {
-    path: '/snake',
+    path: '/snake/snake',
     exact: true,
-    component: require('../snake.js').default,
+    component: require('../snake/snake.js').default,
   },
   {
     component: () =>
