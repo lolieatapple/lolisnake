@@ -36,11 +36,11 @@ class Snake {
   }
 
   randX() {
-    return Math.floor((Math.random()*(this.maxX-6))+3);
+    return Math.floor((Math.random()*(this.maxX-10))+3);
   }
 
   randY() {
-    return Math.floor((Math.random()*(this.maxY-6))+3);
+    return Math.floor((Math.random()*(this.maxY-10))+3);
   }
 
   run(width, height) {
@@ -106,7 +106,15 @@ class Snake {
       this.snake[i].left = this.snake[i - 1].left;
     }
 
-    if (this.clock % 100 === 0) {
+    if (this.clock % 10 === 0 && this.level < 20) {
+      this.snake.push({ top: tailY, left: tailX, type: 'body' });
+    } else if (this.clock % 100 === 0 && this.level < 40) {
+      this.snake.push({ top: tailY, left: tailX, type: 'body' });
+    } else if (this.clock % 200 === 0 && this.level < 60) {
+      this.snake.push({ top: tailY, left: tailX, type: 'body' });
+    } else if (this.clock % 500 === 0 && this.level < 80) {
+      this.snake.push({ top: tailY, left: tailX, type: 'body' });
+    } else if (this.clock % 1000 === 0 && this.level < 90) {
       this.snake.push({ top: tailY, left: tailX, type: 'body' });
     } else if ( this.snakeLength !== this.snakeOldLength ) {
       let length = this.snakeLength - this.snakeOldLength;
