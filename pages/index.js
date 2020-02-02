@@ -176,6 +176,12 @@ class Ground extends React.Component {
               if (v.type === 'normal') {
                 return <div className={styles.normalFood} style={{ top: top + "vh", left: left + "vh" }} />
               }
+              if (v.type === 'long') {
+                return <div className={styles.longFood} style={{ top: top + "vh", left: left + "vh" }} />
+              }
+              if (v.type === 'short') {
+                return <div className={styles.shortFood} style={{ top: top + "vh", left: left + "vh" }} />
+              }
               return <div className={styles.superFood} style={{ top: top + "vh", left: left + "vh" }} />
             })}
           </div>

@@ -36,11 +36,11 @@ class Snake {
   }
 
   randX() {
-    return Math.floor((Math.random()*this.maxX-4)+2);
+    return Math.floor((Math.random()*(this.maxX-6))+3);
   }
 
   randY() {
-    return Math.floor((Math.random()*this.maxY-4)+2);
+    return Math.floor((Math.random()*(this.maxY-6))+3);
   }
 
   run(width, height) {
@@ -106,11 +106,18 @@ class Snake {
       this.snake[i].left = this.snake[i - 1].left;
     }
 
-    if (this.clock % 100 === 0 || this.snakeLength !== this.snakeOldLength) {
+    if (this.clock % 100 === 0) {
       this.snake.push({ top: tailY, left: tailX, type: 'body' });
-      this.snakeOldLength = this.snakeLength;
+    } else if ( this.snakeLength !== this.snakeOldLength ) {
+      let length = this.snakeLength - this.snakeOldLength;
+      if (length > 0) {
+        this.snake.push({ top: tailY, left: tailX, type: 'body' });
+        this.snakeOldLength++;
+      } else if (length < 0) {
+        this.snake.pop();
+        this.snakeOldLength--;
+      }
     }
-
   }
 
   snakeHeadGo() {
@@ -149,9 +156,14 @@ class Snake {
 
   addFood() {
     if (Math.floor((Math.random()*20)) === 0 ) {
-      if (Math.floor((Math.random()*10)) === 0 ) {
+      let type = Math.floor((Math.random()*10));
+      if (type === 0 ) {
         this.food.push({top: this.randY(), left: this.randX(), type:'super' });
-      } else {
+      } else if (type === 1) {
+        this.food.push({top: this.randY(), left: this.randX(), type:'long' });
+      } else if (type === 2) {
+        this.food.push({top: this.randY(), left: this.randX(), type:'short' });
+      }else {
         this.food.push({top: this.randY(), left: this.randX(), type:'normal' });
       }
     }
@@ -177,6 +189,16 @@ class Snake {
       if (this.snake[0].left === this.food[i].left && this.snake[0].top === this.food[i].top) {
         if (this.food[i].type === 'normal') {
           this.foodScore += 100
+        } else if (this.food[i].type === 'long') {
+          this.foodScore += 1000
+          this.snakeLength += 10;
+        } else if (this.food[i].type === 'short') {
+          this.foodScore += 1000
+          if (this.snakeLength > 10) {
+            this.snakeLength -= 10;
+          } else {
+            this.snakeLength = 0;
+          }
         } else {
           this.foodScore += 1000
         }
