@@ -79,17 +79,34 @@ class Ground extends React.Component {
   }
 
   setRank = (nick, score, level, time) => {
+
     axios({
       method: 'GET',
       url: this.rankServer,
       timeout: 10000,
-      params: {
-        nick,
-        score,
-        level,
-        time
+    }).then((value) => {
+      console.log(value.data);
+      let obj = value.data;
+      if (!obj[nick] || score > obj[nick].score) {
+        axios({
+          method: 'GET',
+          url: this.rankServer,
+          timeout: 10000,
+          params: {
+            nick,
+            score,
+            level,
+            time
+          }
+        }).then((value)=>{
+          console.log(value);
+          window.alert('恭喜！你更新了自己的最高分数！')
+        }).catch(console.log);
+        
       }
-    }).then(console.log).catch(console.log);
+    }).catch((err)=>{
+      window.alert(err);
+    });
   }
 
   onRank = () => {
