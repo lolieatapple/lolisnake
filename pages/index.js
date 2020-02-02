@@ -70,11 +70,12 @@ class Ground extends React.Component {
   }
 
   setSpeed = (level) => {
+    console.log('speed level:', level);
     if (this.speed) {
       clearInterval(this.speed);
     }
-
-    this.speed = setInterval(this.go, 200 - level * 2);
+    let time = level < 99?level:99;
+    this.speed = setInterval(this.go, 200 - time * 2);
   }
 
   setRank = (nick, score, level, time) => {

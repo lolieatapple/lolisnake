@@ -51,6 +51,10 @@ class Snake {
     this.calcLevel();
     this.calcScore();
     this.addFood();
+    if (this.food.length > 50) {
+      this.clearFood();
+    }
+    
     let ret = this.collisionDetection();
     return {
       score: this.score,
@@ -76,7 +80,7 @@ class Snake {
       this.height = height;
       let vh = height / 100;
       let vw = width / 100;
-      this.maxX = Number((width / vh - 1).toFixed(0))
+      this.maxX = Number((width / vh - 1).toFixed(0)) - 1;
 
       console.log('maxX:', this.maxX);
     }
@@ -150,6 +154,12 @@ class Snake {
       } else {
         this.food.push({top: this.randY(), left: this.randX(), type:'normal' });
       }
+    }
+  }
+
+  clearFood() {
+    if (Math.floor((Math.random()*20)) === 0 ) {
+      this.food.splice(0, 1);
     }
   }
 
