@@ -36,11 +36,11 @@ class Snake {
   }
 
   randX() {
-    return Math.floor((Math.random()*this.maxX)+1);
+    return Math.floor((Math.random()*this.maxX-4)+2);
   }
 
   randY() {
-    return Math.floor((Math.random()*this.maxY)+1);
+    return Math.floor((Math.random()*this.maxY-4)+2);
   }
 
   run(width, height) {
