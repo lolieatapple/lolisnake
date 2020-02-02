@@ -55,6 +55,9 @@ class Ground extends React.Component {
 
   go = () => {
     let ret = this.snakeEngine.run(window.innerWidth, window.innerHeight);
+    if (ret.level !== this.state.level) {
+      this.setSpeed(ret.level);
+    }
     this.setState({ snake: ret.snake, score: ret.score, level: ret.level, clock: ret.clock, food: ret.food });
     if (ret.gameOver) {
       let nick = document.getElementById('input').value;
